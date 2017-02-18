@@ -3,6 +3,7 @@
 
 int numerosCadastrados = 0;
 int *numerosAuxiliar;
+int *numero;
 
 void menu();
 void cadastrarNumero();
@@ -11,10 +12,6 @@ void exibirNumerosCadastrados();
 void mostraQuantidadeDeNumerosCadastrados();
 void removerUltimoNumero();
 void decrementaNumerosCadastrados();
-
-void realoca(int *&numero);
-
-void aloca(int *&numero);
 
 using namespace std;
 
@@ -31,7 +28,7 @@ void menu() {
     cout << "2. Exibir número(s) cadastrados" << endl;
     cout << "3. Exibir quantidade de números cadastrados" << endl;
     cout << "4. Remover último número" << endl;
-    cout << "4. Sair" << endl;
+    cout << "5. Sair" << endl;
 
     cout << "Esolha uma opção válida: ";
     cin >> escolha;
@@ -49,11 +46,16 @@ void menu() {
         case '4':
             removerUltimoNumero();
             break;
+        case '5':
+            exit(0);
         default:
             cout << "Opção inválida! Tente novamente pressionando qualquer tecla para continuar...";
             __fpurge(stdin);
             getchar();
     }
+    __fpurge(stdin);
+    getchar();
+    system("clear");
     menu();
 }
 
@@ -74,10 +76,10 @@ void exibirNumerosCadastrados() {
 
 void cadastrarNumero() {
 
-    int *numero;
+    numero = numerosAuxiliar;
 
-    if(numerosCadastrados > 0) realoca(numero);
-    else aloca(numero);
+    if(numerosCadastrados > 0) numero = (int *) realloc(numero, numerosCadastrados * sizeof(int));//realoca(numero);
+    else numero = (int *)malloc(sizeof(int));
 
     if(!numero) {
         cout << "Exaustão de memória" << endl;
@@ -89,14 +91,6 @@ void cadastrarNumero() {
     numerosAuxiliar = numero;
 
     contaNumerosCadastrados();
-}
-
-void aloca(int *&numero) {
-    numero = (int *) malloc(sizeof(int));
-}
-
-void realoca(int *&numero) {
-    numero = (int *) realloc(numero, numerosCadastrados * sizeof(int));
 }
 
 void contaNumerosCadastrados() {
